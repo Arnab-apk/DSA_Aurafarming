@@ -30,17 +30,25 @@ void prefixToPostfix(char prefix[]) {
 
     // Scan from right to left
     for (int i = len - 1; i >= 0; i--) {
-        if (isalnum(prefix[i])) {
-            symbol[0] = prefix[i];
+        char currentChar = prefix[i];
+        
+        // Skip parentheses
+        if (currentChar == '(' || currentChar == ')') {
+            continue;
+        }
+
+        if (isalnum(currentChar)) {
+            symbol[0] = currentChar;
             symbol[1] = '\0';
-            push(symbol);  // Operand → push
+            push(symbol);  // Operand -> push
         } else {
-            // Operator → pop two operands
-            pop(op1);  // actually operand2
-            pop(op2);  // actually operand1
+            // Operator -> pop two operands
+            pop(op1);
+            pop(op2);
 
             // Postfix = operand1 operand2 operator
-            sprintf(expr, "%s%s%c", op2, op1, prefix[i]);
+            // Using snprintf to prevent buffer overflow
+            snprintf(expr, sizeof(expr), "%s%s%c", op2, op1, currentChar);
 
             push(expr);
         }
@@ -50,5 +58,9 @@ void prefixToPostfix(char prefix[]) {
 }
 
 int main() {
-    char prefix[MAX]();
+    char prefix[MAX];
+    printf("Enter a prefix expression (e.g., -+AB\*CD): ");
+    scanf("%s", prefix);
+    prefixToPostfix(prefix);
+    return 0;
 }
