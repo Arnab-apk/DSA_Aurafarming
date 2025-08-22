@@ -18,9 +18,10 @@ else
 void pop()
 {
     if (top== -1) printf("Stack underflow!\n");
-    else{
-        printf("%d popped ",stack[top--]);
-    }
+    else
+        {
+            printf("%d popped ",stack[top--]);
+        }
 }
 
 //peek
@@ -36,16 +37,16 @@ void peek()
 void display()
 {
     if(top==-1) printf("The stack is empty!\n");
-    else{
-        printf("Stack elements are!");
-    }
+    else
+        {
+            printf("Stack elements are!\n");
+            for(int i=top;i>=0;i--)
+            {
+                printf("%d",stack[i]);    
+            }
+            printf("\n");
+        }
 }
-
-
-
-
-
-
 
 int main()
 {
