@@ -9,11 +9,11 @@ struct Node {
 
 // Function prototypes
 struct Node* createNode(int);
-void insertAtBeginning(struct Node**, int);
-void insertAtEnd(struct Node**, int);
-void deleteNode(struct Node**, int);
+struct Node* insertAtBeginning(struct Node*, int);
+struct Node* insertAtEnd(struct Node*, int);
+struct Node* deleteNode(struct Node*, int);
 void displayList(struct Node*);
-void freeList(struct Node**);
+struct Node* freeList(struct Node*);
 
 // Function to create a new node
 struct Node* createNode(int data) {
@@ -28,39 +28,39 @@ struct Node* createNode(int data) {
 }
 
 // Function to insert at beginning
-void insertAtBeginning(struct Node** head, int data) {
+struct Node* insertAtBeginning(struct Node* head, int data) {
     struct Node* newNode = createNode(data);
-    newNode->next = *head;
-    *head = newNode;
+    newNode->next = head;
     printf("Inserted %d at beginning\n", data);
+    return newNode;
 }
 
 // Function to insert at end
-void insertAtEnd(struct Node** head, int data) {
+struct Node* insertAtEnd(struct Node* head, int data) {
     struct Node* newNode = createNode(data);
     
-    if (*head == NULL) {
-        *head = newNode;
-        return;
+    if (head == NULL) {
+        return newNode;
     }
     
-    struct Node* temp = *head;
+    struct Node* temp = head;
     while (temp->next != NULL) {
         temp = temp->next;
     }
     temp->next = newNode;
     printf("Inserted %d at end\n", data);
+    return head;
 }
 
 // Function to delete a node with given data
-void deleteNode(struct Node** head, int key) {
-    struct Node *temp = *head, *prev = NULL;
+struct Node* deleteNode(struct Node* head, int key) {
+    struct Node *temp = head, *prev = NULL;
     
     if (temp != NULL && temp->data == key) {
-        *head = temp->next;
+        struct Node* newHead = temp->next;
         free(temp);
         printf("Deleted %d from list\n", key);
-        return;
+        return newHead;
     }
     
     while (temp != NULL && temp->data != key) {
@@ -70,12 +70,13 @@ void deleteNode(struct Node** head, int key) {
     
     if (temp == NULL) {
         printf("Element %d not found in list\n", key);
-        return;
+        return head;
     }
     
     prev->next = temp->next;
     free(temp);
     printf("Deleted %d from list\n", key);
+    return head;
 }
 
 // Function to display the list
@@ -94,8 +95,8 @@ void displayList(struct Node* node) {
 }
 
 // Function to free the entire list
-void freeList(struct Node** head) {
-    struct Node* current = *head;
+struct Node* freeList(struct Node* head) {
+    struct Node* current = head;
     struct Node* next;
     
     while (current != NULL) {
@@ -103,7 +104,7 @@ void freeList(struct Node** head) {
         free(current);
         current = next;
     }
-    *head = NULL;
+    return NULL;
 }
 
 int main() {
@@ -123,19 +124,19 @@ int main() {
             case 1:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtBeginning(&head, data);
+                head = insertAtBeginning(head, data);
                 break;
                 
             case 2:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtEnd(&head, data);
+                head = insertAtEnd(head, data);
                 break;
                 
             case 3:
                 printf("Enter data to delete: ");
                 scanf("%d", &data);
-                deleteNode(&head, data);
+                head = deleteNode(head, data);
                 break;
                 
             case 4:
@@ -143,7 +144,7 @@ int main() {
                 break;
                 
             case 5:
-                freeList(&head);
+                head = freeList(head);
                 printf("Program terminated\n");
                 return 0;
                 
